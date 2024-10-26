@@ -1,0 +1,14 @@
+// data/products.js
+export const products = Array.from({ length: 5000 }, (_, index) => ({
+  id: index + 1,
+  name: `Product ${index + 1}`,
+  inStock: Math.random() > 0.2, // 80% of products are in stock
+  price: Math.floor(Math.random() * 1000) + 1
+}));
+
+// data/pincodes.js
+export const pincodes = {
+  providerA: ['110001', '110002', '400001'], // Sample pincodes for Provider A
+  providerB: ['560001', '560002', '600001'], // Sample pincodes for Provider B
+  generalPartners: ['800001', '700001'] // Sample pincodes for General Partners
+};
