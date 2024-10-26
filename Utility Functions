@@ -1,0 +1,56 @@
+// utils/deliveryCalculator.js
+import { pincodes } from '../data/pincodes';
+
+export const calculateDeliveryDate = (product, pincode) => {
+  const currentDate = new Date();
+  const currentHour = currentDate.getHours();
+
+  // Determine provider based on pincode
+  let provider = 'General Partners';
+  if (pincodes.providerA.includes(pincode)) {
+    provider = 'Provider A';
+  } else if (pincodes.providerB.includes(pincode)) {
+    provider = 'Provider B';
+  }
+
+  let estimatedDate = new Date();
+
+  if (product.inStock) {
+    switch (provider) {
+      case 'Provider A':
+        if (currentHour < 17) {
+          // Same day delivery
+          return {
+            estimatedDate: estimatedDate.toDateString(),
+            provider,
+          };
+        }
+        estimatedDate.setDate(estimatedDate.getDate() + 1);
+        break;
+
+      case 'Provider B':
+        if (currentHour < 9) {
+          // Same day delivery
+          return {
+            estimatedDate: estimatedDate.toDateString(),
+            provider,
+          };
+        }
+        estimatedDate.setDate(estimatedDate.getDate() + 1);
+        break;
+
+      default:
+        // General Partners: 2-5 days delivery
+        const daysToAdd = Math.floor(Math.random() * 4) + 2;
+        estimatedDate.setDate(estimatedDate.getDate() + daysToAdd);
+    }
+  } else {
+    // Out of stock: Add 7 days for restock
+    estimatedDate.setDate(estimatedDate.getDate() + 7);
+  }
+
+  return {
+    estimatedDate: estimatedDate.toDateString(),
+    provider,
+  };
+};
