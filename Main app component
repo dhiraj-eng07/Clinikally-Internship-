@@ -1,0 +1,44 @@
+// App.js
+import React, { useState } from 'react';
+import { SafeAreaView, StyleSheet } from 'react-native';
+import ProductList from './components/ProductList';
+import PincodeInput from './components/PincodeInput';
+import DeliveryEstimate from './components/DeliveryEstimate';
+import { calculateDeliveryDate } from './utils/deliveryCalculator';
+
+const App = () => {
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [pincode, setPincode] = useState('');
+  const [deliveryInfo, setDeliveryInfo] = useState(null);
+
+  const handleDeliveryCheck = () => {
+    if (selectedProduct && pincode) {
+      const deliveryData = calculateDeliveryDate(selectedProduct, pincode);
+      setDeliveryInfo(deliveryData);
+    }
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <ProductList
+        onSelectProduct={setSelectedProduct}
+        selectedProduct={selectedProduct}
+      />
+      <PincodeInput
+        value={pincode}
+        onChangeText={setPincode}
+        onSubmit={handleDeliveryCheck}
+      />
+      {deliveryInfo && <DeliveryEstimate deliveryInfo={deliveryInfo} />}
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+  },
+});
+
+export default App;
